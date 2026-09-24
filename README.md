@@ -2,14 +2,35 @@
 
 Entregable de la **Clase 8** — Desarrollo de Aplicaciones para Dispositivos Móviles.
 
-App hecha con **Expo + React Native + TypeScript**.
+Marcador para dos equipos (Local y Visitante) hecho con **Expo + React Native + TypeScript**. Cada jugada suma 1, 2 o 3 puntos, muestra quién va ganando, guarda las últimas jugadas y permite deshacer.
+
+| Un equipo ganando | Marcador 0 a 0 (Nuevo partido deshabilitado) |
+|---|---|
+| <img src="docs/local-ganando.png" width="260"> | <img src="docs/cero-a-cero.png" width="260"> |
 
 ## Cómo correrla
 
 ```bash
 npm install
-npx expo start
+npx expo start        # escanear el QR con Expo Go
+npx expo start --web  # o verla en el navegador
 ```
+
+## Estructura
+
+```
+App.tsx                      → monta la pantalla
+screens/MarcadorScreen.tsx   → pantalla: estado, anotar(), deshacer() y estado derivado
+components/PanelEquipo.tsx   → nombre, puntaje y botones de un equipo (sin estado)
+components/BotonAccion.tsx   → botón reutilizable de la clase (+ prop disabled)
+```
+
+## Ejercicios (un commit por ejercicio)
+
+1. **Marcador con una sola función.** Un `useState` por equipo y una única `anotar(equipo, puntos)` para los seis botones. `equipo` está tipado como `type Equipo = 'local' | 'visitante'`, así que `anotar('locall', 2)` no compila. `anotar` usa el setter funcional (`prev => prev + puntos`) y `nuevoPartido` el valor directo (`0`).
+2. **Componente `<PanelEquipo />`.** Recibe `nombre`, `puntos`, `color` y `onAnotar: (puntos: number) => void`. No tiene `useState`: el puntaje vive en la pantalla. Se usa dos veces con colores distintos, y sus botones son `<BotonAccion />`.
+3. **Estado derivado.** La leyenda ("Gana Local por 5" / "Empate"), el resaltado del panel ganador (prop `ganando`) y el botón *Nuevo partido* deshabilitado en 0 a 0 (prop `disabled` en `BotonAccion`) se calculan en cada redibujado a partir de `local` y `visitante`. No hay ningún `useState` nuevo.
+4. **(Opcional) Últimas jugadas y Deshacer.** Cada jugada se guarda como objeto `{ equipo, puntos }` en `jugadas: Jugada[]`. Se muestran las 5 últimas (la más reciente arriba). *Deshacer* resta los puntos de la última jugada con la misma función `sumar` que usa `anotar` y la saca con `jugadas.slice(0, -1)`. Se deshabilita cuando no hay jugadas, y *Nuevo partido* también vacía la lista.
 
 ## Respuestas del Ejercicio 2
 
