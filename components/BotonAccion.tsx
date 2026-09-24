@@ -4,13 +4,20 @@ type Props = {
   titulo: string;
   onPress: () => void;
   color?: string;
+  disabled?: boolean;
 };
 
-export default function BotonAccion({ titulo, onPress, color = '#374151' }: Props) {
+export default function BotonAccion({
+  titulo,
+  onPress,
+  color = '#374151',
+  disabled = false,
+}: Props) {
   return (
     <TouchableOpacity
-      style={[styles.boton, { backgroundColor: color }]}
+      style={[styles.boton, { backgroundColor: color }, disabled && styles.deshabilitado]}
       onPress={onPress}
+      disabled={disabled}
       activeOpacity={0.7}
     >
       <Text style={styles.texto}>{titulo}</Text>
@@ -26,6 +33,9 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     minWidth: 64,
+  },
+  deshabilitado: {
+    opacity: 0.35,
   },
   texto: {
     color: '#fff',

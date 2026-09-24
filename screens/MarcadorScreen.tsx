@@ -25,6 +25,17 @@ export default function MarcadorScreen() {
     setVisitante(0);
   };
 
+  // Estado derivado: se calcula en cada redibujado a partir de local y visitante.
+  // No hace falta ningún useState nuevo.
+  const diferencia = Math.abs(local - visitante);
+  const leyenda =
+    local > visitante
+      ? `Gana Local por ${diferencia}`
+      : visitante > local
+        ? `Gana Visitante por ${diferencia}`
+        : 'Empate';
+  const marcadorEnCero = local === 0 && visitante === 0;
+
   return (
     <View style={styles.contenedor}>
       <Text style={styles.titulo}>Marcador de básquet</Text>
@@ -35,15 +46,24 @@ export default function MarcadorScreen() {
         puntos={local}
         color="#2563eb"
         onAnotar={(p) => anotar('local', p)}
+        ganando={local > visitante}
       />
       <PanelEquipo
         nombre="Visitante"
         puntos={visitante}
         color="#dc2626"
         onAnotar={(p) => anotar('visitante', p)}
+        ganando={visitante > local}
       />
 
-      <BotonAccion titulo="Nuevo partido" onPress={nuevoPartido} color="#111827" />
+      <Text style={styles.leyenda}>{leyenda}</Text>
+
+      <BotonAccion
+        titulo="Nuevo partido"
+        onPress={nuevoPartido}
+        color="#111827"
+        disabled={marcadorEnCero}
+      />
     </View>
   );
 }
@@ -60,5 +80,10 @@ const styles = StyleSheet.create({
   titulo: {
     fontSize: 24,
     fontWeight: '800',
+  },
+  leyenda: {
+    fontSize: 20,
+    fontWeight: '700',
+    color: '#374151',
   },
 });
